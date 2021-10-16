@@ -18,4 +18,3 @@ hora_origem = input("Horário cidade de origem (HH:MM): ")
 long_dest = input("Longitude cidade de destino (0 - 359): ")
 duracao = input("Duração da viagem (HH:MM): ")
 sentido = input("Sentido da viagem (W ou E): ")
-
