@@ -38,7 +38,8 @@ long_dest_array = re.split('(\D+)', long_dest)
 long_dest_ang = long_dest_array[0]
 long_dest_dir = long_dest_array[1]
 
-assert int(long_origem_ang) in range(0, 180) and int(long_dest_ang) in range(0, 180)
+assert int(long_origem_ang) in range(0, 181) and int(long_dest_ang) in range(
+    0, 181)
 assert sentido.upper() in "WE" and long_origem_dir.upper(
 ) in "WE" and long_dest_dir.upper() in "WE"
 assert is_hh_mm(hora_origem) and is_hh_mm(duracao)
@@ -55,9 +56,48 @@ sentido_bin = sentido.upper()
 long_origem_dir_bin = long_origem_dir.upper()
 long_dest_dir_bin = long_dest_dir.upper()
 
-print(f"Longitude cidade de origem ({long_origem}): {long_origem_ang_bin}{long_origem_dir_bin}")
+print(
+    f"Longitude cidade de origem ({long_origem}): {long_origem_ang_bin}{long_origem_dir_bin}"
+)
 print(f"Horário cidade de origem ({hora_origem}): {hora_origem_bin}")
-print(f"Longitude cidade de destino ({long_dest}): {long_dest_ang_bin}{long_dest_dir_bin}")
+print(
+    f"Longitude cidade de destino ({long_dest}): {long_dest_ang_bin}{long_dest_dir_bin}"
+)
 print(f"Duração da viagem ({duracao}): {duracao_bin}")
 print(f"Sentido da viagem ({sentido}): {sentido_bin}")
+''' 
+Fita de entrada:
+AAAAAAAAB#CCCCC:DDDDDD#EEEEEEEED#FFFFF:GGGGGG#H
 
+- Longitude cidade de origem AAAAAAAAB
+AAAAAAAA - representação binária de 8 bits do ângulo entre 0 e 180.
+B - caractere W ou E representando oeste ou leste respectivamente.
+- Horário cidade de origem CCCCC:DDDDDD
+CCCCC - representação binária de 5 bits das horas entre 0 e 23.
+DDDDDD - representação binária de 6 bits dos minutos entre 0 e 59.
+- Longitude cidade de destino
+EEEEEEEE - representação binária de 8 bits do ângulo entre 0 e 180.
+D - caractere W ou E representando oeste ou leste respectivamente.
+- Duração da viagem
+FFFFF - representação binária de 5 bits das horas entre 0 e 23.
+GGGGGG - representação binária de 6 bits dos minutos entre 0 e 59.
+- Sentido da viagem 
+B - caractere W ou E representando oeste ou leste respectivamente.
+
+Saída:
+X#YYYYY:ZZZZZZ
+- Sinalização do dia de chegada
+X - caracteres A, M ou P representando dia anterior, mesmo dia ou próximo dia.
+- Horário de chegada no fuso horário da cidade de destino
+YYYYY - representação binária de 5 bits das horas entre 0 e 23.
+ZZZZZZ - representação binária de 6 bits dos minutos entre 0 e 59.
+
+'''
+
+print("\n")
+print("--- FITA DE ENTRADA DA MÁQUINA ---")
+fita_entrada = [
+    long_origem_ang_bin + long_origem_dir_bin, hora_origem_bin,
+    long_dest_ang_bin + long_dest_dir_bin, duracao_bin, sentido_bin
+]
+print("#".join(fita_entrada))
