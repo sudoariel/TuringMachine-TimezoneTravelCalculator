@@ -5,7 +5,7 @@ Entradas:
 - Longitude cidade de origem (XXX)(W ou E) / 0 a 180 (8 bits)
 - Horário cidade de origem (HH:MM) / 00:00 a 23:59 (5 bits: 6 bits)
 - Longitude cidade de destino (XXX)(W ou E) / 0 a 180 (8 bits)
-- Duração da viagem (HH:MM) / 00:00 a 23:59 (5 bits: 6 bits)
+- Duração da viagem (HH:MM) / 00:00 a 23:59 (6 bits: 6 bits)
 - Sentido da viagem (W ou E) / W ou E (caractere)
 
 Saída:
@@ -50,7 +50,7 @@ long_origem_ang_bin = '{0:08b}'.format(int(long_origem_ang))
 hora_origem_bin = '{0:05b}:{1:06b}'.format(int(hora_origem.split(':')[0]),
                                            int(hora_origem.split(':')[1]))
 long_dest_ang_bin = '{0:08b}'.format(int(long_dest_ang))
-duracao_bin = '{0:05b}:{1:06b}'.format(int(duracao.split(':')[0]),
+duracao_bin = '{0:06b}:{1:06b}'.format(int(duracao.split(':')[0]),
                                        int(duracao.split(':')[1]))
 sentido_bin = sentido.upper()
 long_origem_dir_bin = long_origem_dir.upper()
@@ -67,7 +67,7 @@ print(f"Duração da viagem ({duracao}): {duracao_bin}")
 print(f"Sentido da viagem ({sentido}): {sentido_bin}")
 ''' 
 Fita de entrada:
-AAAAAAAAB#CCCCC:DDDDDD#EEEEEEEED#FFFFF:GGGGGG#H
+AAAAAAAAB#CCCCC:DDDDDD#EEEEEEEED#FFFFFF:GGGGGG#H
 
 - Longitude cidade de origem AAAAAAAAB
 AAAAAAAA - representação binária de 8 bits do ângulo entre 0 e 180.
@@ -79,7 +79,7 @@ DDDDDD - representação binária de 6 bits dos minutos entre 0 e 59.
 EEEEEEEE - representação binária de 8 bits do ângulo entre 0 e 180.
 D - caractere W ou E representando oeste ou leste respectivamente.
 - Duração da viagem
-FFFFF - representação binária de 5 bits das horas entre 0 e 23.
+FFFFFF - representação binária de 6 bits das horas entre 0 e 23.
 GGGGGG - representação binária de 6 bits dos minutos entre 0 e 59.
 - Sentido da viagem 
 B - caractere W ou E representando oeste ou leste respectivamente.
@@ -100,4 +100,31 @@ fita_entrada = [
     long_origem_ang_bin + long_origem_dir_bin, hora_origem_bin,
     long_dest_ang_bin + long_dest_dir_bin, duracao_bin, sentido_bin
 ]
-print("#".join(fita_entrada))
+fita_entrada = "#".join(fita_entrada)
+print(fita_entrada)
+
+
+# Passo 1: Somar hora de origem na duração
+def somar_duracao(fita):
+    fita = fita.split("#")
+    duracao_hora = fita[3].split(":")[0]
+    duracao_minutos = fita[3].split(":")[1]
+    origem_hora = fita[1].split(":")[0]
+    origem_minutos = fita[1].split(":")[1]
+    soma_minutos = bin(int(duracao_minutos, 2) + int(origem_minutos, 2))
+    # Verificar se a soma é maior que 59
+    if int(soma_minutos, 2) > 59:
+        # Subtrair 60 da soma dos minutos
+        soma_minutos = bin(int(soma_minutos, 2) - 60)
+        # Acrescentar 1 hora na duração
+        duracao_hora = bin(int(duracao_hora, 2) + 1)
+
+    soma_horas = bin(int(duracao_hora, 2) + int(origem_hora, 2))
+    duracao_somada = '{0:06b}:{1:06b}'.format(int(soma_horas, 2),
+                                              int(soma_minutos, 2))
+    fita[3] = duracao_somada
+    return "#".join(fita)
+
+fita_entrada = somar_duracao(fita_entrada)
+print("--- FITA APÓS PASSO 1 ---")
+print(fita_entrada)
