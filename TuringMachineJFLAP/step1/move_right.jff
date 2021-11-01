@@ -15,13 +15,6 @@
 		<!--The list of transitions.-->&#13;
 		<transition>&#13;
 			<from>0</from>&#13;
-			<to>1</to>&#13;
-			<read>#</read>&#13;
-			<write>#</write>&#13;
-			<move>R</move>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>0</from>&#13;
 			<to>0</to>&#13;
 			<read>1</read>&#13;
 			<write>1</write>&#13;
@@ -78,9 +71,9 @@
 		</transition>&#13;
 		<transition>&#13;
 			<from>0</from>&#13;
-			<to>0</to>&#13;
-			<read>b</read>&#13;
-			<write>b</write>&#13;
+			<to>1</to>&#13;
+			<read>#</read>&#13;
+			<write>#</write>&#13;
 			<move>R</move>&#13;
 		</transition>&#13;
 	</automaton>&#13;
