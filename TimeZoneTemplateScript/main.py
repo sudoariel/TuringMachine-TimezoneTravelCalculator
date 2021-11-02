@@ -139,6 +139,10 @@ def converter_long_horas(fita):
     long_destino_dec = int(long_destino, 2)
     horigem_dec = long_origem_dec // 15
     hdestino_dec = long_destino_dec // 15
+    horigem_resto = long_origem_dec % 15
+    hdestino_resto = long_destino_dec % 15
+    fita[2] = "{0:08b}".format(horigem_resto) + fita[2][-1]
+    fita[3] = "{0:08b}".format(hdestino_resto) + fita[3][-1]
     fita = "#".join(fita) + "#"
     fita += "{0:04b}".format(horigem_dec) + "#"
     fita += "{0:04b}".format(hdestino_dec)
