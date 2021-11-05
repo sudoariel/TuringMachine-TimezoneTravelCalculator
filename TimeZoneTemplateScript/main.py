@@ -9,7 +9,7 @@ Entradas:
 - Sentido da viagem (W ou E) / W ou E (caractere)
 
 Saída:
-- Horário de chegada no fuso horário da cidade de destino (HH:MM) / 00:00 a 23:59 (5 bits: 6 bits)
+- Horário de chegada no fuso horário da cidade de destino (HH:MM) / 00:00 a 23:59 (6 bits: 6 bits)
 - Sinalizar chegar no mesmo dia, dia anterior ou dia seguinte (D-1, D0, D+1) / A, M, P (caractere)
 '''
 
@@ -68,7 +68,7 @@ print(
 print(f"Sentido da viagem ({sentido}): {sentido_bin}")
 ''' 
 Fita de entrada:
-AAAAAAAAB#CCCCC:DDDDDD#EEEEEEEED#FFFFFF:GGGGGGG#H
+CCCCC:DDDDDD#FFFFFFF:GGGGGGG#AAAAAAAAB#EEEEEEEED#H
 
 - Longitude cidade de origem AAAAAAAAB
 AAAAAAAA - representação binária de 8 bits do ângulo entre 0 e 180.
@@ -177,10 +177,10 @@ def dif_hora_local(fita):
         hresult = horigem + hdestino
         dresult = "M"
     elif HLO == "W" and HLD == "E" and HDIR == "W":
-        hresult = 24 - horigem + hdestino
+        hresult = 24 -(horigem + hdestino)
         dresult = "P"
     elif HLO == "E" and HLD == "W" and HDIR == "E":
-        hresult = 24 - horigem + hdestino
+        hresult = 24 - (horigem + hdestino)
         dresult = "A"
     elif HLO == "E" and HLD == "W" and HDIR == "W":
         hresult = horigem + hdestino
@@ -249,14 +249,6 @@ def ajustar_dia(fita):
     fita[2] = hora_final_bin + ":" + fita[2].split(":")[1]
     return "#".join(fita)
 
-
-fita_entrada = ajustar_dia(fita_entrada)
-print("--- FITA APÓS PASSO 5 (AJUSTAR DIA) ---")
-print(fita_entrada)
-
-# Passo 6:
-# Limpar a fita
-
 def limpar_fita(fita):
     fita = fita.split("#")
     dia = fita[0]
@@ -266,6 +258,8 @@ def limpar_fita(fita):
     minutos_bin = "{0:06b}".format(minutos)
     return dia + "#" + hora_bin + ":" + minutos_bin
 
+
+fita_entrada = ajustar_dia(fita_entrada)
 fita_entrada = limpar_fita(fita_entrada)
-print("--- FITA APÓS PASSO 6 (LIMPAR FITA) ---")
+print("--- FITA APÓS PASSO 5 (AJUSTAR DIA E LIMPAR FITA) ---")
 print(fita_entrada)
